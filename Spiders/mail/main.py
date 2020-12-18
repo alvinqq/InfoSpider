@@ -205,7 +205,7 @@ class YSpider(object):
         self.gen_session(cookie)
         offset = 0
         while 1:
-            sid = re.findall('sid=(\w*);?', cookie)[0]
+            sid = re.findall('JSESSIONID=(\w*);', cookie)[0]
             data = {
                 'var': '<?xml version="1.0"?><object><string name="id">{}</string><boolean name="header">true</boolean><boolean name="returnImageInfo">true</boolean><boolean name="returnAntispamInfo">true</boolean><boolean name="autoName">true</boolean><object name="returnHeaders"><string name="Resent-From">A</string><string name="Sender">A</string><string name="List-Unsubscribe">A</string><string name="Reply-To">A</string></object><boolean name="supportTNEF">true</boolean></object>'.format(
                     sid)
@@ -223,8 +223,8 @@ class YSpider(object):
                 xml = list_resp.content.decode()
                 result = Xml2Json(xml).result
                 obj_list = result['result']['array']['object']
-            except:
-                print('Done. >>>>>> 爬取完成')
+            except Exception as e:
+                print('Done. >>>>>> 爬取异常', e)
                 break
             json_list = []
             for obj in obj_list[:100]:
